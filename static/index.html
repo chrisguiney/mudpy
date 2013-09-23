@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>Hello World!</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+    <div ng-controller="CharacterCtrl">
+        <h2>{{ characterName }}</h2>
+        <p>Available Attribute Points: {{ availableAttributePoints() }}</p>
+        <div>
+            <h3>Attributes:</h3>
+            <ul ng-repeat="(attributeName, attributeValue) in characterAttributes">
+                <li>
+                    <span>{{ attributeName }}</span>
+                    <span>{{ attributeValue }}</span>
+                    <a href="#" class="btn" ng-click="incrementAttribute(attributeName)">
+                        <span class="icon-arrow-up"></span>
+                    </a>
+                    <a href="#" class="btn" ng-click="decrementAttribute(attributeName)">
+                        <span class="icon-arrow-down"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+    <script src="http://underscorejs.org/underscore-min.js"></script>
+    <script type="text/javascript">
+        function CharacterCtrl($scope) {
+
+            $scope.attributePoints = 40;
+
+            $scope.characterName = "Unnamed Character";
+            $scope.characterDescription = "";
+
+            $scope.characterAttributes = {
+                "strength": 0,
+                "dexterity": 0,
+                "intelligence": 0,
+                "constitution": 0,
+                "wisdom": 0,
+                "charisma": 0
+            };
+
+            $scope.incrementAttribute = function(name) {
+                $scope.characterAttributes[name] += 1;
+            };
+
+            $scope.decrementAttribute = function(name) {
+                if($scope.characterAttributes[name] > 0) {
+                    $scope.characterAttributes[name] -= 1;
+                }
+            };
+
+            $scope.availableAttributePoints = function() {
+                return $scope.attributePoints - _.reduce(_.map($scope.characterAttributes, function(value, key){
+                    return value;
+                }), function(prev, item) {
+                    return prev + item;
+                }, 0);
+            };
+        }
+    </script>
+</body>
+</html>
